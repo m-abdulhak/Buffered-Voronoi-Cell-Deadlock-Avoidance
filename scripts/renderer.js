@@ -108,11 +108,18 @@ class Renderer{
                   .on("end", d => this.scene.goalsCircles.filter(p => p.id === d.id).attr("stroke", "lightgray"))
                   .on("start.update drag.update end.update", this.scene.update));
     }
-  
-    update(activeElements){
-      this.svg.selectAll(".bvc-seg").remove();
-      this.svg.selectAll(".collision").remove();
-      
+
+	removeElements(selectionQuery) {
+	  let selection = this.scene.svg.selectAll(selectionQuery).node();
+		while (selection) {
+		  selection.parentNode.remove();
+		  selection = this.scene.svg.selectAll(selectionQuery).node();
+		}
+	}
+
+	update(activeElements) {
+	  this.removeElements('.bvc-seg');
+     
       this.scene.BVCLineSegs = [];
       this.scene.robots.forEach((r,rIndex) => {
         if(typeof(r.BVC) !== "undefined" && r.BVC.length>0){
